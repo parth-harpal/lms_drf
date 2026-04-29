@@ -20,7 +20,11 @@ class LeaveRequestCreateView(generics.CreateAPIView):
     def perform_create(self,serializer):
         leave_request=serializer.save(user=self.request.user,status=STATUS_PENDING)
         LeaveLog.objects.create(leave_request=leave_request,action=ACTION_APPLIED,approved_by=self.request.user)
-        send_leave_request_email.delay(leave_request.id)
+        try:
+            send_leave_request_email.delay(leave_request.id)
+        except Exception as e:
+            # Celery/Redis not available - email task will be skipped
+            print(f"Warning: Could not send email task: {str(e)}")
         
     def create(self, request, *args, **kwargs):
         serializer=self.get_serializer(data=request.data)
@@ -55,7 +59,7 @@ class EmployeeLeaveRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
             return Response({'detail':'Only pending request you can change'},status=status.HTTP_400_BAD_REQUEST)
         return super().update(request,*args,**kwargs)
         
-    def destroy(self,request,instance,*args,**kwargs):
+    def destroy(self,request,*args,**kwargs):
         instance=self.get_object()
         if instance.status != STATUS_PENDING:
             return Response({'detail':'Only pending request you can delete'},status=status.HTTP_400_BAD_REQUEST)
@@ -94,7 +98,11 @@ class LeaveRequestApproveView(APIView):
         leave.status=new_status
         leave.approved_by=request.user
         leave.save()
-        send_leave_update_email.delay(leave.id)
+        try:
+            send_leave_update_email.delay(leave.id)
+        except Exception as e:
+            # Celery/Redis not available - email task will be skipped
+            print(f"Warning: Could not send email task: {str(e)}")
         
         LeaveLog.objects.create(leave_request=leave,action=new_status if new_status==STATUS_APPROVED else STATUS_REJECTED,
                                 approved_by=request.user)

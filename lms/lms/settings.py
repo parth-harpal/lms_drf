@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-4eazju*l$ps%-j5@z%3y*t+$hf3xe6v*+4@@@os*cnmg#m3^^p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -159,6 +159,16 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1)
 }
 
+# CORS Settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "http://localhost:8000",
+    "http://127.0.0.1",
+    "http://127.0.0.1:8000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -168,8 +178,9 @@ EMAIL_HOST_PASSWORD = 'enqqsxnwslcpnknn'
 DEFAULT_FROM_EMAIL='Celery <parthharpal37@gmail.com>'
 
 
-CELERY_TASK_ALWAYS_EAGER = True
-CELERY_TASK_EAGER_PROPAGATES = True
+# CELERY_TASK_ALWAYS_EAGER = True
+# CELERY_TASK_EAGER_PROPAGATES = True
+CELERY_BROKER_URL = 'redis://default:2Y6nR59c7R7oqH2HQtgr5Mn5ihSQxW5d@redis-19303.c74.us-east-1-4.ec2.cloud.redislabs.com:19303'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

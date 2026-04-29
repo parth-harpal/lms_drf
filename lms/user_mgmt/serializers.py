@@ -90,4 +90,4 @@ class UserDetailSerializer(serializers.ModelSerializer):
     leave_balances=LeaveBalanceSerializer(source='leavebalance_set',many=True,read_only=True)
     class Meta:
         model=User
-        fields=['id','username','email','role','leave_balances']
+        fields=['id','username','email','first_name','last_name','role','leave_balances']
