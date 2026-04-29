@@ -180,7 +180,7 @@ DEFAULT_FROM_EMAIL='Celery <parthharpal37@gmail.com>'
 
 # CELERY_TASK_ALWAYS_EAGER = True
 # CELERY_TASK_EAGER_PROPAGATES = True
-CELERY_BROKER_URL = 'redis://default:2Y6nR59c7R7oqH2HQtgr5Mn5ihSQxW5d@redis-19303.c74.us-east-1-4.ec2.cloud.redislabs.com:19303'
+CELERY_BROKER_URL = ''
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
